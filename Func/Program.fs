@@ -32,6 +32,12 @@ let rec sumDigitsUp n =
     if n = 0 then 0
     else n % 10 + sumDigitsUp (n / 10)
 
+let sumDigitsDown num =
+    let rec sumCounter sum num =  
+        if num = 0 then sum
+        else sumCounter (sum + num % 10) (num / 10)
+    sumCounter 0 num
+
 [<EntryPoint>]
 let main argv =
     let res = solve 1. 2. -3.
@@ -51,7 +57,8 @@ let main argv =
 
     Console.Write("Введите число: ")
     let num = Console.ReadLine() |> int
-    Console.WriteLine($"Сумма цифр числа (вверх): {sumDigitsUp num}")
+    Console.WriteLine($"Сумма цифр числа (верхняя рекурсия): {sumDigitsUp num}")
+    Console.WriteLine($"Сумма цифр числа (нижняя рекурсия): {sumDigitsDown num}")
 
     0
     
