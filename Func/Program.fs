@@ -147,6 +147,31 @@ let maxProstDel num =
         | _ -> maxProstDelLoop max (del+1)
     maxProstDelLoop 0 2
 
+let sumPrimeDivisors num =
+    let rec sumDivisors acc current =
+        match current with
+        | 0 -> acc
+        | _ when num % current = 0 && isPrime current -> 
+            sumDivisors (acc + current) (current - 1)
+        | _ -> sumDivisors acc (current - 1)
+    sumDivisors 0 num
+
+let countOddDigitsGreater3 num =
+    cifrFold num 
+        (fun count digit -> if digit % 2 <> 0 && digit > 3 then count + 1 else count) 
+        0 
+        (fun _ -> true)
+
+let productDivisorsWithLessDigitSum num =
+    let originalSum = sumDigitsDown num
+    let rec productDivisors acc current =
+        match current with
+        | 0 -> acc
+        | _ when num % current = 0 && sumDigitsDown current < originalSum ->
+            productDivisors (acc * current) (current - 1)
+        | _ -> productDivisors acc (current - 1)
+    productDivisors 1 num
+
 let EulerFinder num = 
     obhodProst num (fun x y -> x + 1) 0
 
@@ -206,5 +231,12 @@ let main argv =
 
     let num = Console.ReadLine() |> int
     Console.WriteLine($"Максимальный простой делитель числа: {maxProstDel num}")
+
+    Console.Write("\nВведите число для варианта №1: ")
+    let numVar1 = Console.ReadLine() |> int
+
+    Console.WriteLine($"Сумма простых делителей числа {numVar1}: {sumPrimeDivisors numVar1}")
+    Console.WriteLine($"Количество нечетных цифр >3 в числе {numVar1}: {countOddDigitsGreater3 numVar1}")
+    Console.WriteLine($"Произведение делителей с суммой цифр меньше исходного: {productDivisorsWithLessDigitSum numVar1}")
     0
     
