@@ -62,12 +62,17 @@ let fact num =
         else factCounter (mult * num) (num - 1)
     factCounter 1 num
 
-
 let sumOrFact flag =
     match flag with
     | true -> sumDigitsDown
     | _ -> fact
     
+let rec cifrFold num (func: int->int->int) acc =
+   match num with
+   | 0 -> acc
+   | someth -> cifrFold (someth / 10) func (func acc (someth % 10))
+
+
 [<EntryPoint>]
 let main argv =
     let res = solve 1. 2. -3.
@@ -97,6 +102,9 @@ let main argv =
         Console.Write("Введите число: ")
     let num = Console.ReadLine() |> int
     Console.WriteLine($"Ответ: {((sumOrFact true) num)}")
-
+    Console.WriteLine($"Сумма: {cifrFold num (fun x y -> x + y) 0  }")
+    Console.WriteLine($"Произведение: {cifrFold num (fun x y -> x * y) 1  }")
+    Console.WriteLine($"Максимальный: {cifrFold num (fun x y -> if x > y then x else y) 0 }")
+    Console.WriteLine($"Минимальный: {cifrFold num (fun x y -> if x < y then x else y) 10 }")
     0
     
