@@ -114,6 +114,39 @@ let obhodProst num (func: int->int->int) init  =
             obhodProstLoop num func newAcc (current - 1)
     obhodProstLoop num func init num
 
+let obhodProstCondition num (func: int->int->int) init (condition: int -> bool)  =
+    let rec obhodProstLoop num func acc current condition =
+        match current with
+        | 0 -> acc
+        | someth ->
+            let newAcc =
+                let result = gcd num current
+                let flag = condition current
+                match result, flag with
+                | 1, true -> func acc current
+                | _, _ -> acc
+            obhodProstLoop num func newAcc (current - 1) condition
+    obhodProstLoop num func init num condition
+
+let isPrime num =
+    if num <= 1 then false
+    else
+        let rec isPrimeLoop curr =
+            match curr with
+            | _ when curr * curr > num -> true
+            | _ when num % curr = 0 -> false
+            | _ -> isPrimeLoop (curr + 1)
+        isPrimeLoop 2
+        
+
+let maxProstDel num =
+    let rec maxProstDelLoop max del =
+        match del with
+        | _ when del > num -> max
+        | _ when (num % del = 0) && (isPrime del) -> maxProstDelLoop del (del+1)
+        | _ -> maxProstDelLoop max (del+1)
+    maxProstDelLoop 0 2
+
 let EulerFinder num = 
     obhodProst num (fun x y -> x + 1) 0
 
@@ -164,5 +197,14 @@ let main argv =
     Console.WriteLine($"Максимальный: {obhodProst num (fun x y -> if x > y then x else y) 0 }")
     Console.WriteLine($"Минимальный: {obhodProst num (fun x y -> if x < y then x else y) 10 }")
     Console.WriteLine($"Эйлер: {EulerFinder num}")
+
+    Console.WriteLine($"Сумма: {obhodProstCondition num (fun x y -> x + y) 0 (fun x -> if x > 8 then false else true)}")
+    Console.WriteLine($"Произведение: {obhodProstCondition num (fun x y -> x * y) 1  (fun x -> if x > 8 then false else true)}")
+    Console.WriteLine($"Максимальный: {obhodProstCondition num (fun x y -> if x > y then x else y) 0 (fun x -> if x > 8 then false else true)}")
+    Console.WriteLine($"Минимальный: {obhodProstCondition num (fun x y -> if x < y then x else y) 10 (fun x -> if x > 8 then false else true)}")
+    Console.WriteLine($"Эйлер: {EulerFinder num }")
+
+    let num = Console.ReadLine() |> int
+    Console.WriteLine($"Максимальный простой делитель числа: {maxProstDel num}")
     0
     
