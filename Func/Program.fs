@@ -77,6 +77,13 @@ let rec cifrFold num (func: int -> int -> int) acc (condition: int -> bool) =
         | true -> cifrFold (tmp / 10) func (func acc (tmp % 10)) condition
         | false -> cifrFold (tmp / 10) func acc condition
 
+let quiz lang =
+    match lang with
+    | "F#" -> "Подлиза"
+    | "Prolog" -> "Я тебе не верю"
+    | "Ruby" -> "Арсений Сергеевич, это вы?"
+    | someth -> "Фух"
+
 [<EntryPoint>]
 let main argv =
     let res = solve 1. 2. -3.
@@ -110,5 +117,14 @@ let main argv =
     Console.WriteLine($"Произведение: {cifrFold num (fun x y -> x * y) 1  }")
     Console.WriteLine($"Максимальный: {cifrFold num (fun x y -> if x > y then x else y) 0 }")
     Console.WriteLine($"Минимальный: {cifrFold num (fun x y -> if x < y then x else y) 10 }")
+
+    Console.WriteLine($"Сумма цифр, которые больше 7: {cifrFold num (fun x y -> (x + y)) 0 (fun z -> z > 7)}")
+    Console.WriteLine($"Произведение цифр, которые меньше 3: {cifrFold num (fun x y -> (x * y)) 1 (fun z -> z < 3)}")
+    Console.WriteLine($"Максимальное нечётное число: {cifrFold num (fun x y -> if x > y then x else y) 0 (fun z -> z % 2 = 1)}")
+
+    Console.Write("Введите любимый язык: ")
+    let answer = Console.ReadLine() |> string
+    let langResult = quiz answer
+    Console.WriteLine(langResult)
     0
     
