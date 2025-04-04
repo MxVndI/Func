@@ -96,6 +96,27 @@ let chooseLanguageCurry () =
         writer langResult
     subChooseLanguageCurry Console.ReadLine quiz Console.WriteLine
 
+let rec gcd x y = 
+    match y with
+    | 0 -> x
+    | someth -> gcd y (x%y)
+
+let obhodProst num (func: int->int->int) init  =
+    let rec obhodProstLoop num func acc current =
+        match current with
+        | 0 -> acc
+        | someth ->
+            let newAcc =
+                let result = gcd num current
+                match result with
+                | 1 -> func acc current
+                | _ -> acc
+            obhodProstLoop num func newAcc (current - 1)
+    obhodProstLoop num func init num
+
+let EulerFinder num = 
+    obhodProst num (fun x y -> x + 1) 0
+
 [<EntryPoint>]
 let main argv =
     let res = solve 1. 2. -3.
@@ -135,5 +156,13 @@ let main argv =
     Console.WriteLine($"Максимальное нечётное число: {cifrFold num (fun x y -> if x > y then x else y) 0 (fun z -> z % 2 = 1)}")
     chooseLanguageSuperPos()
     chooseLanguageCurry()
+
+    Console.Write("Введите число: ")
+    let num = Console.ReadLine() |> int
+    Console.WriteLine($"Сумма: {obhodProst num (fun x y -> x + y) 0  }")
+    Console.WriteLine($"Произведение: {obhodProst num (fun x y -> x * y) 1  }")
+    Console.WriteLine($"Максимальный: {obhodProst num (fun x y -> if x > y then x else y) 0 }")
+    Console.WriteLine($"Минимальный: {obhodProst num (fun x y -> if x < y then x else y) 10 }")
+    Console.WriteLine($"Эйлер: {EulerFinder num}")
     0
     
