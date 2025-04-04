@@ -84,6 +84,18 @@ let quiz lang =
     | "Ruby" -> "Арсений Сергеевич, это вы?"
     | someth -> "Фух"
 
+let chooseLanguageSuperPos () = 
+    Console.Write("Введите любимый язык: ")
+    (Console.ReadLine >> quiz >> Console.WriteLine)
+
+let chooseLanguageCurry () = 
+    Console.Write("Введите любимый язык: ")
+    let subChooseLanguageCurry reader func writer =
+        let answer = reader()
+        let langResult = func answer
+        writer langResult
+    subChooseLanguageCurry Console.ReadLine quiz Console.WriteLine
+
 [<EntryPoint>]
 let main argv =
     let res = solve 1. 2. -3.
@@ -121,10 +133,7 @@ let main argv =
     Console.WriteLine($"Сумма цифр, которые больше 7: {cifrFold num (fun x y -> (x + y)) 0 (fun z -> z > 7)}")
     Console.WriteLine($"Произведение цифр, которые меньше 3: {cifrFold num (fun x y -> (x * y)) 1 (fun z -> z < 3)}")
     Console.WriteLine($"Максимальное нечётное число: {cifrFold num (fun x y -> if x > y then x else y) 0 (fun z -> z % 2 = 1)}")
-
-    Console.Write("Введите любимый язык: ")
-    let answer = Console.ReadLine() |> string
-    let langResult = quiz answer
-    Console.WriteLine(langResult)
+    chooseLanguageSuperPos()
+    chooseLanguageCurry()
     0
     
