@@ -67,11 +67,15 @@ let sumOrFact flag =
     | true -> sumDigitsDown
     | _ -> fact
     
-let rec cifrFold num (func: int->int->int) acc =
-   match num with
-   | 0 -> acc
-   | someth -> cifrFold (someth / 10) func (func acc (someth % 10))
-
+let rec cifrFold num (func: int -> int -> int) acc (condition: int -> bool) =
+    match num with
+    | 0 -> acc
+    | tmp ->
+        let digit = abs (tmp % 10)
+        let flag = condition digit
+        match flag with
+        | true -> cifrFold (tmp / 10) func (func acc (tmp % 10)) condition
+        | false -> cifrFold (tmp / 10) func acc condition
 
 [<EntryPoint>]
 let main argv =
