@@ -37,7 +37,37 @@ let sumDigitsDown num =
         if num = 0 then sum
         else sumCounter (sum + num % 10) (num / 10)
     sumCounter 0 num
+    
+let rec countDivUp temp num =
+    match num with
+    | _ when temp > num -> 0
+    | _ when num % temp > 0 -> (countDivUp (temp + 1) num)
+    | _ when num % temp = 0 -> 1 + (countDivUp (temp + 1) num)
 
+
+let rec countDivisorsDown num tmp count =
+    match num with
+    | _ when tmp>num -> count
+    | _ when num % tmp > 0 -> countDivisorsDown num (tmp + 1) count
+    | _ when num % tmp = 0 -> countDivisorsDown num (tmp + 1) (count + 1)
+    
+let ans b = 
+    match b with
+    | true -> (countDivUp 1)
+    |_ -> sumDigitsUp
+
+let fact num =
+    let rec factCounter mult num =
+        if num = 0 then mult
+        else factCounter (mult * num) (num - 1)
+    factCounter 1 num
+
+
+let sumOrFact flag =
+    match flag with
+    | true -> sumDigitsDown
+    | _ -> fact
+    
 [<EntryPoint>]
 let main argv =
     let res = solve 1. 2. -3.
@@ -59,6 +89,14 @@ let main argv =
     let num = Console.ReadLine() |> int
     Console.WriteLine($"Сумма цифр числа (верхняя рекурсия): {sumDigitsUp num}")
     Console.WriteLine($"Сумма цифр числа (нижняя рекурсия): {sumDigitsDown num}")
+
+    Console.WriteLine($"qweqweqweа: {countDivisorsDown 6 1 0}")
+    Console.WriteLine($"qweqweqweа: {countDivUp 6 1}")
+
+    let meow c = 
+        Console.Write("Введите число: ")
+    let num = Console.ReadLine() |> int
+    Console.WriteLine($"Ответ: {((sumOrFact true) num)}")
 
     0
     
