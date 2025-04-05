@@ -175,6 +175,19 @@ let productDivisorsWithLessDigitSum num =
 let EulerFinder num = 
     obhodProst num (fun x y -> x + 1) 0
 
+let chooseFunc ans = 
+    match ans with 
+    | 1 -> sumPrimeDivisors
+    | 2 -> countOddDigitsGreater3
+    | 3 -> productDivisorsWithLessDigitSum
+    | _ -> failwith "Ошибка: неверный номер функции"
+
+let chooseFuncSuperPos =
+    chooseFunc >> (fun f -> f) 
+
+let chooseFuncCyrr (ans, num) =
+    (chooseFunc ans) num
+
 [<EntryPoint>]
 let main argv =
     let res = solve 1. 2. -3.
