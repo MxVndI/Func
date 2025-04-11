@@ -110,6 +110,37 @@ let averageOfAbsList list =
         |> List.map abs
         |> List.averageBy float
 
+let buildListsPureRec list =
+    let rec findIndex x lst idx =
+        match lst with
+        | [] -> None
+        | h :: t -> if h = x then Some idx else findIndex x t (idx + 1)
+
+    let rec updateCounter index value lst =
+        match lst with
+        | [] -> []
+        | h :: t -> 
+            if index = 0 then (h + value) :: t
+            else h :: updateCounter (index - 1) value t
+
+    let rec processElements accL1 accL2 = function
+        | [] -> (List.rev accL1, List.rev accL2)
+        | h :: t ->
+            match findIndex h accL1 0 with
+            | Some idx ->
+                let newL2 = updateCounter idx 1 accL2
+                processElements accL1 newL2 t
+            | None ->
+                processElements (h :: accL1) (1 :: accL2) t
+
+    processElements [] [] list
+
+let buildListsList list =
+    list
+    |> List.groupBy id
+    |> List.map (fun (k, v) -> (k, List.length v))
+    |> List.unzip
+
 [<EntryPoint>]
 let main argv = 
 //    writeList readData
