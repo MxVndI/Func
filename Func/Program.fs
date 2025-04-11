@@ -27,12 +27,35 @@ let countElemsAfterLastMax list =
     | [] -> 0
     | head :: tail -> loop head 0 1 tail
 
-let countAfterLastMax list =
+let elemsAfterFirstMax list =
+    let rec loop currentMax acc = function
+        | [] -> acc
+        | h :: t ->
+            if h > currentMax then 
+                loop h [] t
+            else 
+                loop currentMax (acc @ [h]) t
+
+    match list with
+    | [] -> []
+    | head :: tail -> 
+        loop head [] tail 
+
+let countAfterLastMax list newList=
     if List.isEmpty list then 0
     else
         let maxVal = List.max list
         let lastIndex = List.findIndexBack (fun x -> x = maxVal) list
         List.length list - lastIndex - 1
+
+let elemsAfterFirstMaxList list =
+    if List.isEmpty list then []
+    else
+        let maxValue = List.max list
+        list
+        |> List.tryFindIndex (fun x -> x = maxValue)
+        |> Option.map (fun idx -> List.skip (idx + 1) list)
+        |> Option.defaultValue []
 
 let findUniqueRec list =
     let rec findDifferent main = function
@@ -62,5 +85,8 @@ let findUniqueElement list =
 let main argv = 
 //    writeList readData
    let listik = readData
-   System.Console.WriteLine (countElemsAfterLastMax listik)
+   //System.Console.WriteLine (countElemsAfterLastMax listik)
+   System.Console.WriteLine (elemsAfterFirstMax listik)
+   System.Console.WriteLine (elemsAfterFirstMaxList listik)
+
    0
