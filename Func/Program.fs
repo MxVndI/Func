@@ -81,6 +81,18 @@ let findUniqueElement list =
     |> List.pick (fun (key, group) -> 
         if List.length group = 1 then Some key else None)
 
+let rec countEvenRec list =
+    match list with
+    | [] -> 0
+    | head :: tail ->
+        let increment = if head % 2 = 0 then 1 else 0
+        increment + countEvenRec tail
+
+let countEvenList list =
+    list
+    |> List.filter (fun x -> x % 2 = 0)
+    |> List.length
+
 [<EntryPoint>]
 let main argv = 
 //    writeList readData
