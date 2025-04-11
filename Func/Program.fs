@@ -141,6 +141,25 @@ let buildListsList list =
     |> List.map (fun (k, v) -> (k, List.length v))
     |> List.unzip
 
+let countRussianRec (str: string) =
+    let rec loop count index =
+        if index >= str.Length then count
+        else
+            let c = str.[index]
+            let isRussian = 
+                (c >= 'А' && c <= 'Я') || 
+                (c >= 'а' && c <= 'я')
+            loop (count + if isRussian then 1 else 0) (index + 1)
+    loop 0 0
+
+let countRussianList (str: string) =
+    str 
+    |> List.ofSeq
+    |> List.filter (fun c -> 
+        (c >= 'А' && c <= 'Я') || 
+        (c >= 'а' && c <= 'я'))
+    |> List.length
+
 [<EntryPoint>]
 let main argv = 
 //    writeList readData
