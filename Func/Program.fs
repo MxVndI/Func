@@ -93,6 +93,23 @@ let countEvenList list =
     |> List.filter (fun x -> x % 2 = 0)
     |> List.length
 
+let averageOfAbsRec list =
+    let rec loop sum = function
+        | [] -> sum
+        | h :: t -> loop (sum + abs h) t
+    
+    if List.isEmpty list then 0.0
+    else
+        let total = loop 0 list
+        float total / float (List.length list)
+
+let averageOfAbsList list =
+    if List.isEmpty list then 0.0
+    else
+        list
+        |> List.map abs
+        |> List.averageBy float
+
 [<EntryPoint>]
 let main argv = 
 //    writeList readData
